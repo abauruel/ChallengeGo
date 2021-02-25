@@ -1,12 +1,11 @@
-FROM golang:1.14-alpine AS builder
+FROM golang:1.14 AS builder
 
 WORKDIR /go/src/app
 
 COPY . .
-RUN go build && go install
+RUN go build -ldflags "-s -w" 
 
 FROM scratch
 WORKDIR /go/src/app
 COPY --from=builder /go/src/app .
-
-ENTRYPOINT ["app"]
+ENTRYPOINT ["./app"]
